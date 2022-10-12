@@ -12,12 +12,17 @@ class AlarmClock {
         } else if (this.alarmCollection.some((e) => e.id == id)) {
             return console.error('Такой звонок уже есть');
         } else {
-            this.alarmCollection.push({id: id, time: time, callback: callback});
+            this.alarmCollection.push({id, time, callback});
         }
     } 
 
     removeClock(id) {
-        this.alarmCollection = this.alarmCollection.filter((i) => i.id !== id);
+        const afterArrLenght = this.alarmCollection.length;
+        this.alarmCollection = this.alarmCollection.filter(alarm => alarm.id !== id);
+
+        const beforeArrLenght = this.alarmCollection.length;
+
+        return beforeArrLenght < afterArrLenght;
     }
 
     getCurrentFormattedTime() {
@@ -27,7 +32,7 @@ class AlarmClock {
     start() {
         let checkClock = alarm => {
             if (this.getCurrentFormattedTime() === alarm.time) {
-                return alarm.callback;
+                alarm.callback();
             }
         };
 
